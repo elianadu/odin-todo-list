@@ -1,0 +1,103 @@
+@font-face {
+  font-family: "Gothic";
+  src: url("fonts/PirataOne-Regular.ttf") format("truetype");  
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face{
+    font-family: "Spinnaker";
+    src: url("fonts/Spinnaker-Regular.ttf") format("truetype");
+}
+
+:root {
+  --darker-color: black;
+  --dark-color: rgb(104, 1, 1);
+  --medium-color: rgb(197, 0, 0);
+  --light-color: rgb(255, 246, 246);
+}
+
+body {
+  font-size: 1rem;
+  font-family: Spinnaker, Roboto, sans-serif;
+  min-height: 100vh;
+  height: 100%;
+  color: var(--light-color);
+  background-image: url(images/background.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: stretch;
+  text-align: center;
+  a {
+    color: var(--light-color);
+  }
+}
+
+header,
+footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-color: var(--darker-color);
+  color: var(--light-color);
+  height: 50px;
+  width: 100vw;
+  flex: 0 0 auto;
+}
+
+#content {
+  flex: 2 1 auto;
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  h1 {
+    color: var(--light-color);
+    div {
+      font-size: rem;
+    }
+  }
+  .restaurantName {
+    font-size: 6rem;
+    font-family: Gothic;
+  }
+  .menu-item {
+    margin: 20px;
+    background-color: var(--darker-color);
+    padding: 40px;
+    border-radius: 30px;
+    width: calc(max(40%, 300px));
+  }
+  .about-desc {
+    background-color: black;
+    width: calc(max(40%, 300px));
+    padding: 40px;
+    border-radius: 30px;
+  }
+}
+
+header {
+  nav {
+    display: flex;
+    justify-content: space-evenly;
+    width: 80%;
+    button {
+      color: var(--light-color);
+      background-color: var(--dark-color);
+      border: none;
+      height: 3rem;
+      width: 5rem;
+      border-radius: 10px;
+    }
+  }
+}
+
+footer {
+  background-color: var(--dark-color);
+}
