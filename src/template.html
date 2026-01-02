@@ -6,14 +6,45 @@
     <title>Document</title>
   </head>
   <body>
-    <header>
-      <nav>
-        <button>Home</button>
-        <button>Menu</button>
-        <button>About</button>
-      </nav>
-    </header>
-    <div id="content"></div>
-    <footer>Background image from &nbsp;<a href="https://www.freepik.com/free-photo/3d-space-sky-background_3267756.htm#fromView=search&page=1&position=2&uuid=95376d78-e69a-4879-bacd-57a2357c10b1&query=underworld"> kjpargeter</a></footer>
+    <header><span>Eliana's</span>&nbsp;To-do List</header>
+    <nav class="sidebar">
+      <div class="project-container"></div>
+      <button class="new-project-btn">Add new project</button>
+    </nav>
+    <div class="container">
+      <div class="todo-container"></div>
+      <button class="new-todo-btn">Add new todo</button>
+    </div>
+    <footer>
+      <a href="https://github.com/elianadu/odin-todo-list">Made with &lt;3</a>
+    </footer>
+    <dialog class="new-todo-dialog">
+      <form action="">
+        <label for="todo-title">Title:</label>
+        <input type="text" id="todo-title">
+        <label for="todo-desc">Description:</label>
+        <input type="text" id="todo-desc">
+        <label for="dueDate">Due date:</label>
+        <input type="text" id="dueDate">
+        <label for="priority">Priority:</label>
+        <input type="number" id="priority">
+        <div>
+          <button value="cancel" formmethod="dialog">Cancel</button>
+          <button class="confirm-todo-btn" value="default">Confirm</button>
+        </div>
+      </form>
+  </dialog>
+  <dialog class="new-proj-dialog">
+      <form action="">
+        <label for="proj-title">Project title:</label>
+        <input type="text" id="proj-title">
+        <label for="proj-desc">Projectescription:</label>
+        <input type="text" id="proj-desc">
+        <div>
+          <button value="cancel" formmethod="dialog">Cancel</button>
+          <button class="confirm-proj-btn" value="default">Confirm</button>
+        </div>
+      </form>
+  </dialog>
   </body>
 </html>
