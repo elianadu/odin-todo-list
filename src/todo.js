@@ -16,6 +16,13 @@ export class Todo {
       priority: this._priority,
     };
   }
+
+  setProperties(title, description, dueDate, priority) {
+    this._title = title;
+    this._description = description;
+    this._dueDate = dueDate;
+    this._priority = priority;
+  }
 }
 
 export const addTodo = (parentProj, todo) => {

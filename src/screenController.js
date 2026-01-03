@@ -2,9 +2,12 @@ import { removeTodo } from "./todo.js";
 import { projectArr, removeProject } from "./project.js";
 
 export let currentProject = null;
+export let isTodoEditMode = false;
+export let todoToBeEdited = null;
 
 export const displayAllTodos = () => {
   const todoContainer = document.querySelector(".todo-container");
+  const newTodoDialog = document.querySelector(".new-todo-dialog");
 
   while (
     todoContainer.hasChildNodes() &&
@@ -18,7 +21,7 @@ export const displayAllTodos = () => {
 
     const appendItemsToTodoCard = (todo) => {
       for (let property in todo) {
-        if (todo.hasOwnProperty(property) && property !== "id") {
+        if (todo.hasOwnProperty(property) && property !== "id" && property !== "_parentProj") {
           let div = document.createElement("div");
           div.textContent = todo[property];
           todoCard.append(div);
@@ -32,6 +35,24 @@ export const displayAllTodos = () => {
         displayAllTodos();
       });
       todoCard.append(removeTodoBtn);
+
+      const editTodoBtn = document.createElement("button");
+      editTodoBtn.textContent = "Edit todo";
+      editTodoBtn.classList.add("edit-todo-btn");
+      editTodoBtn.addEventListener("click", () => {
+        newTodoDialog.showModal();
+        isTodoEditMode = true;
+        todoToBeEdited = todo;
+        document.querySelector("#todo-title").value =
+          todoToBeEdited.properties().title;
+        document.querySelector("#todo-desc").value =
+          todoToBeEdited.properties().description;
+        document.querySelector("#dueDate").value =
+          todoToBeEdited.properties().dueDate;
+        document.querySelector("#priority").value =
+          todoToBeEdited.properties().priority;
+      });
+      todoCard.append(editTodoBtn);
     };
     appendItemsToTodoCard(todo);
     todoContainer.append(todoCard);
@@ -40,6 +61,28 @@ export const displayAllTodos = () => {
     for (let todo of currentProject.todoArr) {
       displayTodo(todo);
     }
+  }
+
+  const getCurrentProject = () => {
+    return currentProject;
+  }
+  const getIsTodoEditMode = () => {
+    return isTodoEditMode;
+  }
+
+  const setTodoEditMode = (state) => {
+    isTodoEditMode = state;
+  }
+
+  const todoToBeEdited = () => {
+    return todoToBeEdited;
+  }
+
+  return {
+    getCurrentProject: getCurrentProject,
+    getIsTodoEditMode: getIsTodoEditMode,
+    setTodoEditMode: setTodoEditMode,
+    todoToBeEdited: todoToBeEdited,
   }
 };
 
@@ -57,21 +100,19 @@ export const displayAllProjects = () => {
     let projectCard = document.createElement("div");
     projectCard.classList.add("project-card");
     if (projectCard === document.querySelector(".selected-project")) {
-            projectCard.classList.remove("selected-project");
-        }
-    if (currentProject && proj.id === currentProject.id) {
-        projectCard.classList.add("selected-project");
+      projectCard.classList.remove("selected-project");
     }
-    else {
-        projectCard.addEventListener("click", () => {
+    if (currentProject && proj.id === currentProject.id) {
+      projectCard.classList.add("selected-project");
+    } else {
+      projectCard.addEventListener("click", () => {
         currentProject = proj;
         displayAllTodos();
         displayAllProjects();
-    })
-        }
+      });
+    }
 
     const appendItemsToProjCard = (proj) => {
-
       for (let property in proj) {
         if (
           proj.hasOwnProperty(property) &&

@@ -1,16 +1,15 @@
 import "./styles.css";
 import { Todo, addTodo } from "./todo.js";
 import { Project, addProject } from "./project.js";
-import { currentProject, displayAllTodos, displayAllProjects } from "./screenController.js";
+import {currentProject, isTodoEditMode, todoToBeEdited, displayAllTodos, displayAllProjects } from "./screenController.js";
 
-
-let myTodo01 = new Todo("Title", "Description", "02/17/2025", 1);
-let myTodo02 = new Todo("Title2", "Description2", "06/07/2026", 2);
 let myProject1 = new Project("ProjTitle", "ProjDesc");
+let myTodo01 = new Todo(myProject1, "Title", "Description", "02/17/2025", 1);
+let myTodo02 = new Todo(myProject1, "Title2", "Description2", "06/07/2026", 2);
 
-let myTodo11 = new Todo("Title11", "Description11", "02/17/2025", 1);
-let myTodo12 = new Todo("Title12", "Description12", "06/07/2026", 2);
 let myProject2 = new Project("ProjTitle2", "ProjDesc2");
+let myTodo11 = new Todo(myProject2, "Title11", "Description11", new Date(2024, 2, 10), 1);
+let myTodo12 = new Todo(myProject2, "Title12", "Description12", "06/07/2026", 2);
 
 addTodo(myProject1, myTodo01);
 addTodo(myProject1, myTodo02);
@@ -37,7 +36,13 @@ function ScreenController() {
     const desc = document.querySelector("#todo-desc").value;
     const dueDate = document.querySelector("#dueDate").value;
     const prority = document.querySelector("#priority").value;
-    addTodo(currentProject, new Todo(title, desc, dueDate, prority));
+    if (isTodoEditMode) {
+      todoToBeEdited.setProperties(title, desc, dueDate, prority);
+      displayAllTodos().setTodoEditMode(false);
+    }
+    else {
+      addTodo(currentProject, new Todo(title, desc, dueDate, prority));
+    }
     newTodoDialog.close();
 
     // clear todo form values
