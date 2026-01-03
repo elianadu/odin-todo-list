@@ -25,6 +25,6 @@ export const addTodo = (parentProj, todo) => {
 export const removeTodo = (parentProj, id) => {
     const index = parentProj.todoArr.findIndex((todo) => todo.id === id);
   if (index > -1) {
-    todoArr.splice(index, 1);
+    parentProj.todoArr.splice(index, 1);
   }
 };

@@ -1,7 +1,9 @@
 import { removeTodo } from "./todo.js";
 import { projectArr, removeProject } from "./project.js";
 
-export const displayAllTodos = (parentProj) => {
+export let currentProject = null;
+
+export const displayAllTodos = () => {
   const todoContainer = document.querySelector(".todo-container");
 
   while (
@@ -26,7 +28,7 @@ export const displayAllTodos = (parentProj) => {
       removeTodoBtn.textContent = "Remove todo";
       removeTodoBtn.classList.add("remove-todo-btn");
       removeTodoBtn.addEventListener("click", () => {
-        removeTodo(todo.id);
+        removeTodo(currentProject, todo.id);
         displayAllTodos();
       });
       todoCard.append(removeTodoBtn);
@@ -34,8 +36,8 @@ export const displayAllTodos = (parentProj) => {
     appendItemsToTodoCard(todo);
     todoContainer.append(todoCard);
   };
-  if (parentProj) {
-    for (let todo of parentProj.todoArr) {
+  if (currentProject) {
+    for (let todo of currentProject.todoArr) {
       displayTodo(todo);
     }
   }
@@ -54,15 +56,21 @@ export const displayAllProjects = () => {
   const displayProject = (proj) => {
     let projectCard = document.createElement("div");
     projectCard.classList.add("project-card");
+    if (projectCard === document.querySelector(".selected-project")) {
+            projectCard.classList.remove("selected-project");
+        }
+    if (currentProject && proj.id === currentProject.id) {
+        projectCard.classList.add("selected-project");
+    }
+    else {
+        projectCard.addEventListener("click", () => {
+        currentProject = proj;
+        displayAllTodos();
+        displayAllProjects();
+    })
+        }
 
     const appendItemsToProjCard = (proj) => {
-      let titleDiv = document.createElement("div");
-      titleDiv.textContent = proj.title;
-      projectCard.append(titleDiv);
-
-      let descDiv = document.createElement("div");
-      descDiv.textContent = proj.description;
-      projectCard.append(descDiv);
 
       for (let property in proj) {
         if (
@@ -91,7 +99,6 @@ export const displayAllProjects = () => {
   };
 
   for (let project of projectArr) {
-    console.log(project);
     displayProject(project);
   }
 };

@@ -21,13 +21,13 @@
     <dialog class="new-todo-dialog">
       <form action="">
         <label for="todo-title">Title:</label>
-        <input type="text" id="todo-title">
+        <input type="text" id="todo-title" required>
         <label for="todo-desc">Description:</label>
-        <input type="text" id="todo-desc">
+        <input type="date" id="todo-desc">
         <label for="dueDate">Due date:</label>
         <input type="text" id="dueDate">
-        <label for="priority">Priority:</label>
-        <input type="number" id="priority">
+        <label for="priority">Priority (between 1 and 5):</label>
+        <input type="number" min="1" max="5" id="priority">
         <div>
           <button value="cancel" formmethod="dialog">Cancel</button>
           <button class="confirm-todo-btn" value="default">Confirm</button>
@@ -37,8 +37,8 @@
   <dialog class="new-proj-dialog">
       <form action="">
         <label for="proj-title">Project title:</label>
-        <input type="text" id="proj-title">
-        <label for="proj-desc">Projectescription:</label>
+        <input type="text" id="proj-title" required>
+        <label for="proj-desc">Project description:</label>
         <input type="text" id="proj-desc">
         <div>
           <button value="cancel" formmethod="dialog">Cancel</button>
