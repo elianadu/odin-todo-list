@@ -1,8 +1,20 @@
 import "./styles.css";
 import { Todo, addTodo } from "./todo.js";
 import { Project, addProject } from "./project.js";
-import {displayAllTodos, displayAllProjects } from "./screenController.js";
-import {getCurrentProject, setCurrentProject, getIsTodoEditMode, setTodoEditMode, getTodoToBeEdited, setTodoToBeEdited
+import { displayAllTodos, displayAllProjects } from "./screenController.js";
+import {
+  getCurrentProject,
+  setCurrentProject,
+  getIsTodoEditMode,
+  setTodoEditMode,
+  getTodoToBeEdited,
+  setTodoToBeEdited,
+} from "./screenController.js";
+import {
+  getIsProjEditMode,
+  setProjEditMode,
+  getProjToBeEdited,
+  setProjToBeEdited,
 } from "./screenController.js";
 
 let myProject1 = new Project("ProjTitle", "ProjDesc");
@@ -10,8 +22,20 @@ let myTodo01 = new Todo(myProject1, "Title", "Description", "2025-02-17", 1);
 let myTodo02 = new Todo(myProject1, "Title2", "Description2", "06/07/2026", 2);
 
 let myProject2 = new Project("ProjTitle2", "ProjDesc2");
-let myTodo11 = new Todo(myProject2, "Title11", "Description11", new Date(2024, 2, 10), 1);
-let myTodo12 = new Todo(myProject2, "Title12", "Description12", "06/07/2026", 2);
+let myTodo11 = new Todo(
+  myProject2,
+  "Title11",
+  "Description11",
+  new Date(2024, 2, 10),
+  1
+);
+let myTodo12 = new Todo(
+  myProject2,
+  "Title12",
+  "Description12",
+  "06/07/2026",
+  2
+);
 
 addTodo(myProject1, myTodo01);
 addTodo(myProject1, myTodo02);
@@ -27,7 +51,6 @@ function ScreenController() {
   const newTodoBtn = document.querySelector(".new-todo-btn");
   const confirmTodoBtn = document.querySelector(".confirm-todo-btn");
 
-
   newTodoBtn.addEventListener("click", () => {
     newTodoDialog.showModal();
   });
@@ -41,8 +64,7 @@ function ScreenController() {
     if (getIsTodoEditMode()) {
       getTodoToBeEdited().setProperties(title, desc, dueDate, prority);
       setTodoEditMode(false);
-    }
-    else {
+    } else {
       addTodo(getCurrentProject(), new Todo(title, desc, dueDate, prority));
     }
     newTodoDialog.close();
@@ -66,12 +88,19 @@ function ScreenController() {
     newProjDialog.showModal();
   });
 
-
   confirmProjBtn.addEventListener("click", (event) => {
     event.preventDefault();
     const title = document.querySelector("#proj-title").value;
     const desc = document.querySelector("#proj-desc").value;
-    addProject(new Project(title, desc));
+
+    if (getIsProjEditMode()) {
+      getProjToBeEdited().setProperties(title, desc);
+      setProjEditMode(false);
+    } else {
+      let proj = new Project(title, desc);
+      addProject(proj);
+      setCurrentProject(proj);
+    }
     newProjDialog.close();
 
     // clear todo form values
@@ -79,6 +108,7 @@ function ScreenController() {
       document.querySelector("#proj-title").value = "";
       document.querySelector("#proj-desc").value = "";
       displayAllProjects();
+      displayAllTodos();
     })();
   });
 

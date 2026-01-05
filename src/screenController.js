@@ -6,17 +6,45 @@ let currentProject = null;
 let isTodoEditMode = false;
 let todoToBeEdited = null;
 
+let isProjEditMode = false;
+let projToBeEdited = null;
+
 // State getters and setters
 export const getCurrentProject = () => currentProject;
-export const setCurrentProject = (proj) => { currentProject = proj; };
+export const setCurrentProject = (proj) => {
+  currentProject = proj;
+};
 export const getIsTodoEditMode = () => isTodoEditMode;
-export const setTodoEditMode = (state) => { isTodoEditMode = state; };
+export const setTodoEditMode = (state) => {
+  isTodoEditMode = state;
+};
 export const getTodoToBeEdited = () => todoToBeEdited;
-export const setTodoToBeEdited = (todo) => { todoToBeEdited = todo; };
+export const setTodoToBeEdited = (todo) => {
+  todoToBeEdited = todo;
+};
+
+export const getIsProjEditMode = () => isProjEditMode;
+export const setProjEditMode = (state) => {
+  isProjEditMode = state;
+};
+export const getProjToBeEdited = () => projToBeEdited;
+export const setProjToBeEdited = (todo) => {
+  projToBeEdited = todo;
+};
 
 export const displayAllTodos = () => {
   const todoContainer = document.querySelector(".todo-container");
   const newTodoDialog = document.querySelector(".new-todo-dialog");
+  const newTodoBtn = document.querySelector(".new-todo-btn");
+
+  if (!currentProject && projectArr.length > 0) {
+    currentProject = projectArr[0];
+  } else if (!currentProject) {
+    newTodoBtn.classList.add("hidden");
+  }
+  if (currentProject && newTodoBtn.classList.contains("hidden")) {
+    newTodoBtn.classList.remove("hidden");
+  }
 
   while (
     todoContainer.hasChildNodes() &&
@@ -31,7 +59,11 @@ export const displayAllTodos = () => {
 
     const appendItemsToTodoCard = (todo) => {
       for (let property in todo) {
-        if (todo.hasOwnProperty(property) && property !== "id" && property !== "_parentProj") {
+        if (
+          todo.hasOwnProperty(property) &&
+          property !== "id" &&
+          property !== "_parentProj"
+        ) {
           let div = document.createElement("div");
           div.textContent = todo[property];
           todoCard.append(div);
@@ -54,10 +86,14 @@ export const displayAllTodos = () => {
         newTodoDialog.showModal();
         setTodoEditMode(true);
         setTodoToBeEdited(todo);
-        document.querySelector("#todo-title").value = todoToBeEdited.properties().title;
-        document.querySelector("#todo-desc").value = todoToBeEdited.properties().description;
-        document.querySelector("#dueDate").value = todoToBeEdited.properties().dueDate;
-        document.querySelector("#priority").value = todoToBeEdited.properties().priority;
+        document.querySelector("#todo-title").value =
+          todoToBeEdited.properties().title;
+        document.querySelector("#todo-desc").value =
+          todoToBeEdited.properties().description;
+        document.querySelector("#dueDate").value =
+          todoToBeEdited.properties().dueDate;
+        document.querySelector("#priority").value =
+          todoToBeEdited.properties().priority;
       });
       todoCard.append(editTodoBtn);
     };
@@ -75,6 +111,8 @@ export const displayAllTodos = () => {
 
 export const displayAllProjects = () => {
   const projectContainer = document.querySelector(".project-container");
+    const newProjDialog = document.querySelector(".new-proj-dialog");
+
 
   while (
     projectContainer.hasChildNodes() &&
@@ -92,8 +130,10 @@ export const displayAllProjects = () => {
     if (getCurrentProject() && proj.id === getCurrentProject().id) {
       projectCard.classList.add("selected-project");
     } else {
-      projectCard.addEventListener("click", () => {
-        setCurrentProject(proj);
+      projectCard.addEventListener("click", (event) => {
+        if (event.target.tagName !== 'BUTTON') {
+          setCurrentProject(proj);
+        }
         displayAllTodos();
         displayAllProjects();
       });
@@ -116,11 +156,38 @@ export const displayAllProjects = () => {
       removeProjBtn.textContent = "Remove project";
       removeProjBtn.classList.add("remove-proj-btn");
       removeProjBtn.addEventListener("click", () => {
-        removeProject(proj.id);
+        if (proj.id === currentProject.id) {
+          const index = projectArr.findIndex((p) => p.id === proj.id);
+          removeProject(proj.id);
+          if (projectArr.length === 0) {
+            setCurrentProject(null);
+          /* } else if (index === 0) {
+            currentProject = projectArr[index]; */
+          } else {
+            setCurrentProject(projectArr[0]);
+          }
+        }
+        else {
+          removeProject(proj.id);
+        }
         displayAllProjects();
         displayAllTodos();
       });
       projectCard.append(removeProjBtn);
+
+      const editProjBtn = document.createElement("button");
+      editProjBtn.textContent = "Edit proj";
+      editProjBtn.classList.add("edit-proj-btn");
+      editProjBtn.addEventListener("click", () => {
+        newProjDialog.showModal();
+        setProjEditMode(true);
+        setProjToBeEdited(proj);
+        document.querySelector("#proj-title").value =
+          projToBeEdited.properties().title;
+        document.querySelector("#proj-desc").value =
+          projToBeEdited.properties().description;
+      });
+      projectCard.append(editProjBtn);
     };
 
     appendItemsToProjCard(proj);

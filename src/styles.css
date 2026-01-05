@@ -63,3 +63,7 @@ nav {
  .selected-project {
   background-color: var(--blue);
  }
+
+ .hidden {
+  display: none;
+ }

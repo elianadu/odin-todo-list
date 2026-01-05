@@ -11,6 +11,18 @@ export class Project {
   get todoArr() {
     return this._todoArr;
   }
+
+  setProperties(title, description) {
+    this._title = title;
+    this._description = description;
+  }
+
+  properties() {
+    return {
+      title: this._title,
+      description: this._description,
+    };
+  }
 }
 
 export const addProject = (proj) => {
