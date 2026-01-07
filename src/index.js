@@ -1,7 +1,11 @@
 import "./styles.css";
 import { Todo, addTodo } from "./todo.js";
-import { Project, addProject } from "./project.js";
+import { projectArr, Project, addProject } from "./project.js";
 import { displayAllTodos, displayAllProjects } from "./screenController.js";
+import { loadFromLocalStorage, saveToLocalStorage } from "./project.js";
+
+loadFromLocalStorage();
+
 import {
   getCurrentProject,
   setCurrentProject,
@@ -17,16 +21,30 @@ import {
   setProjToBeEdited,
 } from "./screenController.js";
 
-let myProject1 = new Project("Demo Project", "Project description");
-let myTodo01 = new Todo(myProject1, "Title", "Description", "2026-04-20", 1);
-let myTodo02 = new Todo(myProject1, "Title 2", "Description 2", "2026-06-07", 2);
-let myTodo03 = new Todo(myProject1, "Title 3", "Description 3", "2026-06-09", 3);
-
-
-addTodo(myProject1, myTodo01);
-addTodo(myProject1, myTodo02);
-addTodo(myProject1, myTodo03);
-addProject(myProject1);
+// Only create test projects if localStorage is empty
+if (projectArr.length === 0) {
+  let myProject1 = new Project("Demo Project", "Project description");
+  let myTodo01 = new Todo(myProject1, "Title", "Description", "2026-04-20", 1);
+  let myTodo02 = new Todo(
+    myProject1,
+    "Title 2",
+    "Description 2",
+    "2026-06-07",
+    2
+  );
+  let myTodo03 = new Todo(
+    myProject1,
+    "Title 3",
+    "Description 3",
+    "2026-06-09",
+    3
+  );
+  addTodo(myProject1, myTodo01);
+  addTodo(myProject1, myTodo02);
+  addTodo(myProject1, myTodo03);
+  addProject(myProject1);
+  saveToLocalStorage(); // Save initial data
+}
 
 function ScreenController() {
   // creating new Project
@@ -38,9 +56,8 @@ function ScreenController() {
     newTodoDialog.showModal();
   });
 
-  const cancelTodoBtn = document.querySelector('.cancel-todo-btn');
+  const cancelTodoBtn = document.querySelector(".cancel-todo-btn");
   cancelTodoBtn.addEventListener("click", () => {
-
     document.querySelector("#todo-title").value = "";
     document.querySelector("#todo-desc").value = "";
     document.querySelector("#dueDate").value = "";
@@ -65,6 +82,7 @@ function ScreenController() {
         new Todo(getCurrentProject(), title, desc, dueDate, priority)
       );
     }
+    saveToLocalStorage();
     newTodoDialog.close();
 
     // clear todo form values
@@ -86,12 +104,11 @@ function ScreenController() {
     newProjDialog.showModal();
   });
 
-  const cancelProjBtn = document.querySelector('.cancel-proj-btn');
+  const cancelProjBtn = document.querySelector(".cancel-proj-btn");
   cancelProjBtn.addEventListener("click", () => {
-   
     document.querySelector("#proj-title").value = "";
     document.querySelector("#proj-desc").value = "";
-    
+
     setProjEditMode(false);
     setProjToBeEdited(null);
   });
@@ -109,6 +126,7 @@ function ScreenController() {
       addProject(proj);
       setCurrentProject(proj);
     }
+    saveToLocalStorage();
     newProjDialog.close();
 
     // clear todo form values

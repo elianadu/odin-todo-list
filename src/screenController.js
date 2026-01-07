@@ -1,6 +1,8 @@
 import { removeTodo } from "./todo.js";
 import { projectArr, removeProject } from "./project.js";
 import { format, parseISO } from "date-fns";
+import { saveToLocalStorage, loadFromLocalStorage } from "./project.js";
+
 
 // Module-level state
 let currentProject = null;
@@ -92,7 +94,9 @@ export const displayAllTodos = () => {
       removeTodoBtn.classList.add("icon");
       removeTodoBtn.addEventListener("click", () => {
         removeTodo(getCurrentProject(), todo.id);
+        saveToLocalStorage();
         displayAllTodos();
+        
       });
       btnDiv.append(removeTodoBtn);
 
@@ -115,6 +119,7 @@ export const displayAllTodos = () => {
           todoToBeEdited.properties().dueDate;
         document.querySelector("#priority").value =
           todoToBeEdited.properties().priority;
+          saveToLocalStorage();
       });
       btnDiv.append(editTodoBtn);
       todoCard.append(btnDiv);
@@ -189,14 +194,13 @@ export const displayAllProjects = () => {
           removeProject(proj.id);
           if (projectArr.length === 0) {
             setCurrentProject(null);
-            /* } else if (index === 0) {
-            currentProject = projectArr[index]; */
           } else {
             setCurrentProject(projectArr[0]);
           }
         } else {
           removeProject(proj.id);
         }
+        saveToLocalStorage();
         displayAllProjects();
         displayAllTodos();
       });
@@ -217,6 +221,7 @@ export const displayAllProjects = () => {
           projToBeEdited.properties().title;
         document.querySelector("#proj-desc").value =
           projToBeEdited.properties().description;
+          saveToLocalStorage();
       });
       btnDiv.append(editProjBtn);
       projectCard.append(btnDiv);

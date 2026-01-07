@@ -8,6 +8,19 @@
   --purple: #e4c1f9;
   --darker-bg: #e1f5ff;
   --lighter-bg: white;
+  font-family: "Lato";
+}
+
+@font-face {
+  font-family: "Lato";
+  src: url("fonts/Lato-Regular.ttf") format("truetype");  
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face{
+  font-family: "Montserrat";
+  src: url("fonts/Montserrat-Regular.ttf") format("truetype");
 }
 
 button.icon {
@@ -35,19 +48,18 @@ body {
   grid-template-columns: 1fr 4fr;
   header,
   footer {
+    font-family: "Montserrat";
     display: flex;
     align-items: center;
     grid-column: 1 / -1;
     padding: 30px;
     background-color: var(--darker-bg);
   }
-  /*header {
-    justify-content: center;
-    .header-text {
-      justify-content: center;
-      text-align: center;
-    }
-  }*/
+  header {
+    padding: 0 40px;
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
   footer {
     justify-content: center;
   }
@@ -96,7 +108,7 @@ body {
   text-align: center;
   justify-content: space-between;
   min-height: 200px;
-  width: 90%;
+  width: 80%;
   margin: 30px;
   padding: 30px;
   background-color: var(--lighter-bg);
@@ -108,6 +120,7 @@ body {
 }
 
 .todo-card {
+  border: 1px solid var(--blue);
   border-radius: 10px;
   width: 300px;
   background-color: 50%;
@@ -141,12 +154,15 @@ body {
 
 .priority-1 {
     background-color: var(--pink);
+    border: none;
 }
 .priority-2 {
     background-color: var(--yellow);
+    border: none;
 }
 .priority-3 {
     background-color: var(--green);
+    border: none;
 }
 
 dialog {
@@ -221,4 +237,37 @@ dialog .confirm-proj-btn {
 dialog .confirm-todo-btn:hover,
 dialog .confirm-proj-btn:hover {
   background-color: var(--darker-bg);
+}
+
+/* Mobile responsive styles - stack vertically */
+@media (max-width: 800px) {
+  body {
+    grid-template-columns: 1fr;
+    grid-template-rows: 100px auto auto 50px;
+  }
+
+  .sidebar {
+    grid-row: 2; /* Sidebar goes in second row */
+    max-height: 300px; /* Limit height so it doesn't dominate */
+    border-bottom: 2px solid var(--darker-bg);
+  }
+
+  .container {
+    grid-row: 3; /* Main content goes in third row */
+  }
+
+  .project-card,
+  .todo-card {
+    margin: 15px;
+    padding: 20px;
+  }
+
+  dialog {
+    min-width: 90%;
+    max-width: 90%;
+  }
+
+  dialog form {
+    padding: 20px;
+  }
 }
