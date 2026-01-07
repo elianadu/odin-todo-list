@@ -1,5 +1,6 @@
 import { removeTodo } from "./todo.js";
 import { projectArr, removeProject } from "./project.js";
+import { format, parseISO } from "date-fns";
 
 // Module-level state
 let currentProject = null;
@@ -58,30 +59,50 @@ export const displayAllTodos = () => {
     todoCard.classList.add("todo-card");
 
     const appendItemsToTodoCard = (todo) => {
-      for (let property in todo) {
-        if (
-          todo.hasOwnProperty(property) &&
-          property !== "id" &&
-          property !== "_parentProj"
-        ) {
-          let div = document.createElement("div");
-          div.textContent = todo[property];
-          todoCard.append(div);
-        }
+      let contentDiv = document.createElement("div");
+      contentDiv.classList.add("content-div");
+
+      let titleDiv = document.createElement("div");
+      titleDiv.textContent = todo.properties().title;
+      contentDiv.append(titleDiv);
+
+      let dueDateDiv = document.createElement("div");
+      const dateString = todo.properties().dueDate;
+      if (dateString) {
+        let date = parseISO(dateString);
+        dueDateDiv.textContent = format(date, "MMM dd, yyyy");
+      } else {
+        dueDateDiv.textContent = "";
       }
 
+      contentDiv.append(dueDateDiv);
+      todoCard.append(contentDiv);
+
+      todoCard.classList.add(`priority-${todo.properties().priority}`);
+
+      let btnDiv = document.createElement("div");
+      btnDiv.classList.add("button-div");
+
       const removeTodoBtn = document.createElement("button");
-      removeTodoBtn.textContent = "Remove todo";
+      const removeTodoIcon = document.createElement("span");
+      removeTodoIcon.className = "material-symbols-outlined";
+      removeTodoIcon.textContent = "delete";
+      removeTodoBtn.append(removeTodoIcon);
       removeTodoBtn.classList.add("remove-todo-btn");
+      removeTodoBtn.classList.add("icon");
       removeTodoBtn.addEventListener("click", () => {
         removeTodo(getCurrentProject(), todo.id);
         displayAllTodos();
       });
-      todoCard.append(removeTodoBtn);
+      btnDiv.append(removeTodoBtn);
 
       const editTodoBtn = document.createElement("button");
-      editTodoBtn.textContent = "Edit todo";
+      const editTodoIcon = document.createElement("span");
+      editTodoIcon.className = "material-symbols-outlined";
+      editTodoIcon.textContent = "edit";
+      editTodoBtn.append(editTodoIcon);
       editTodoBtn.classList.add("edit-todo-btn");
+      editTodoBtn.classList.add("icon");
       editTodoBtn.addEventListener("click", () => {
         newTodoDialog.showModal();
         setTodoEditMode(true);
@@ -95,7 +116,8 @@ export const displayAllTodos = () => {
         document.querySelector("#priority").value =
           todoToBeEdited.properties().priority;
       });
-      todoCard.append(editTodoBtn);
+      btnDiv.append(editTodoBtn);
+      todoCard.append(btnDiv);
     };
 
     appendItemsToTodoCard(todo);
@@ -111,8 +133,7 @@ export const displayAllTodos = () => {
 
 export const displayAllProjects = () => {
   const projectContainer = document.querySelector(".project-container");
-    const newProjDialog = document.querySelector(".new-proj-dialog");
-
+  const newProjDialog = document.querySelector(".new-proj-dialog");
 
   while (
     projectContainer.hasChildNodes() &&
@@ -131,7 +152,7 @@ export const displayAllProjects = () => {
       projectCard.classList.add("selected-project");
     } else {
       projectCard.addEventListener("click", (event) => {
-        if (event.target.tagName !== 'BUTTON') {
+        if (event.target.tagName !== "BUTTON") {
           setCurrentProject(proj);
         }
         displayAllTodos();
@@ -152,32 +173,42 @@ export const displayAllProjects = () => {
         }
       }
 
+      let btnDiv = document.createElement("div");
+      btnDiv.classList.add("button-div");
+
       const removeProjBtn = document.createElement("button");
-      removeProjBtn.textContent = "Remove project";
+      const removeProjIcon = document.createElement("span");
+      removeProjIcon.className = "material-symbols-outlined";
+      removeProjIcon.textContent = "delete";
+      removeProjBtn.append(removeProjIcon);
       removeProjBtn.classList.add("remove-proj-btn");
+      removeProjBtn.classList.add("icon");
       removeProjBtn.addEventListener("click", () => {
         if (proj.id === currentProject.id) {
           const index = projectArr.findIndex((p) => p.id === proj.id);
           removeProject(proj.id);
           if (projectArr.length === 0) {
             setCurrentProject(null);
-          /* } else if (index === 0) {
+            /* } else if (index === 0) {
             currentProject = projectArr[index]; */
           } else {
             setCurrentProject(projectArr[0]);
           }
-        }
-        else {
+        } else {
           removeProject(proj.id);
         }
         displayAllProjects();
         displayAllTodos();
       });
-      projectCard.append(removeProjBtn);
+      btnDiv.append(removeProjBtn);
 
       const editProjBtn = document.createElement("button");
-      editProjBtn.textContent = "Edit proj";
+      const editProjIcon = document.createElement("span");
+      editProjIcon.className = "material-symbols-outlined";
+      editProjIcon.textContent = "edit";
+      editProjBtn.append(editProjIcon);
       editProjBtn.classList.add("edit-proj-btn");
+      editProjBtn.classList.add("icon");
       editProjBtn.addEventListener("click", () => {
         newProjDialog.showModal();
         setProjEditMode(true);
@@ -187,7 +218,8 @@ export const displayAllProjects = () => {
         document.querySelector("#proj-desc").value =
           projToBeEdited.properties().description;
       });
-      projectCard.append(editProjBtn);
+      btnDiv.append(editProjBtn);
+      projectCard.append(btnDiv);
     };
 
     appendItemsToProjCard(proj);

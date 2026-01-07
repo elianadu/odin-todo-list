@@ -17,33 +17,16 @@ import {
   setProjToBeEdited,
 } from "./screenController.js";
 
-let myProject1 = new Project("ProjTitle", "ProjDesc");
-let myTodo01 = new Todo(myProject1, "Title", "Description", "2025-02-17", 1);
-let myTodo02 = new Todo(myProject1, "Title2", "Description2", "06/07/2026", 2);
+let myProject1 = new Project("Demo Project", "Project description");
+let myTodo01 = new Todo(myProject1, "Title", "Description", "2026-04-20", 1);
+let myTodo02 = new Todo(myProject1, "Title 2", "Description 2", "2026-06-07", 2);
+let myTodo03 = new Todo(myProject1, "Title 3", "Description 3", "2026-06-09", 3);
 
-let myProject2 = new Project("ProjTitle2", "ProjDesc2");
-let myTodo11 = new Todo(
-  myProject2,
-  "Title11",
-  "Description11",
-  new Date(2024, 2, 10),
-  1
-);
-let myTodo12 = new Todo(
-  myProject2,
-  "Title12",
-  "Description12",
-  "06/07/2026",
-  2
-);
 
 addTodo(myProject1, myTodo01);
 addTodo(myProject1, myTodo02);
+addTodo(myProject1, myTodo03);
 addProject(myProject1);
-
-addTodo(myProject2, myTodo11);
-addTodo(myProject2, myTodo12);
-addProject(myProject2);
 
 function ScreenController() {
   // creating new Project
@@ -55,17 +38,32 @@ function ScreenController() {
     newTodoDialog.showModal();
   });
 
+  const cancelTodoBtn = document.querySelector('.cancel-todo-btn');
+  cancelTodoBtn.addEventListener("click", () => {
+
+    document.querySelector("#todo-title").value = "";
+    document.querySelector("#todo-desc").value = "";
+    document.querySelector("#dueDate").value = "";
+    document.querySelector("#priority").value = "";
+
+    setTodoEditMode(false);
+    setTodoToBeEdited(null);
+  });
+
   confirmTodoBtn.addEventListener("click", (event) => {
     event.preventDefault();
     const title = document.querySelector("#todo-title").value;
     const desc = document.querySelector("#todo-desc").value;
     const dueDate = document.querySelector("#dueDate").value;
-    const prority = document.querySelector("#priority").value;
+    const priority = document.querySelector("#priority").value;
     if (getIsTodoEditMode()) {
-      getTodoToBeEdited().setProperties(title, desc, dueDate, prority);
+      getTodoToBeEdited().setProperties(title, desc, dueDate, priority);
       setTodoEditMode(false);
     } else {
-      addTodo(getCurrentProject(), new Todo(title, desc, dueDate, prority));
+      addTodo(
+        getCurrentProject(),
+        new Todo(getCurrentProject(), title, desc, dueDate, priority)
+      );
     }
     newTodoDialog.close();
 
@@ -86,6 +84,16 @@ function ScreenController() {
 
   newProjBtn.addEventListener("click", () => {
     newProjDialog.showModal();
+  });
+
+  const cancelProjBtn = document.querySelector('.cancel-proj-btn');
+  cancelProjBtn.addEventListener("click", () => {
+   
+    document.querySelector("#proj-title").value = "";
+    document.querySelector("#proj-desc").value = "";
+    
+    setProjEditMode(false);
+    setProjToBeEdited(null);
   });
 
   confirmProjBtn.addEventListener("click", (event) => {

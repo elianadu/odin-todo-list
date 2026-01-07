@@ -4,16 +4,26 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
   </head>
   <body>
-    <header><span>Eliana's</span>&nbsp;To-do List</header>
+    <header> <span class="material-symbols-outlined hidden">menu</span>
+
+      <span class="header-text"><span>My</span>&nbsp;To-do List</span></header>
     <nav class="sidebar">
       <div class="project-container"></div>
-      <button class="new-project-btn">Add new project</button>
+      <button class="new-project-btn icon">
+        <span class="material-symbols-outlined"> note_stack_add </span>
+      </button>
     </nav>
     <div class="container">
       <div class="todo-container"></div>
-      <button class="new-todo-btn hidden">Add new todo</button>
+      <button class="new-todo-btn hidden  icon"><span class="material-symbols-outlined">
+add
+</span></button>
     </div>
     <footer>
       <a href="https://github.com/elianadu/odin-todo-list">Made with &lt;3</a>
@@ -21,30 +31,44 @@
     <dialog class="new-todo-dialog">
       <form action="">
         <label for="todo-title">Title:</label>
-        <input type="text" id="todo-title" required>
+        <input type="text" id="todo-title" required />
         <label for="todo-desc">Description:</label>
-        <input type="text" id="todo-desc">
+        <textarea id="todo-desc" rows="4"></textarea>
         <label for="dueDate">Due date:</label>
-        <input type="date" id="dueDate">
-        <label for="priority">Priority (between 1 and 5):</label>
-        <input type="number" min="1" max="5" id="priority">
+        <input type="date" id="dueDate" />
+        <label for="priority">Priority (between 1 and 3):</label>
+        <input type="number" min="1" max="3" id="priority" />
         <div>
-          <button value="cancel" formmethod="dialog">Cancel</button>
+          <button
+            class="cancel-todo-btn"
+            value="cancel"
+            formmethod="dialog"
+            formnovalidate
+          >
+            Cancel
+          </button>
           <button class="confirm-todo-btn" value="default">Confirm</button>
         </div>
       </form>
-  </dialog>
-  <dialog class="new-proj-dialog">
+    </dialog>
+    <dialog class="new-proj-dialog">
       <form action="">
         <label for="proj-title">Project title:</label>
-        <input type="text" id="proj-title" required>
+        <input type="text" id="proj-title" required />
         <label for="proj-desc">Project description:</label>
-        <input type="text" id="proj-desc">
+        <textarea id="proj-desc" rows="4"></textarea>
         <div>
-          <button value="cancel" formmethod="dialog">Cancel</button>
+          <button
+            class="cancel-proj-btn"
+            value="cancel"
+            formmethod="dialog"
+            formnovalidate
+          >
+            Cancel
+          </button>
           <button class="confirm-proj-btn" value="default">Confirm</button>
         </div>
       </form>
-  </dialog>
+    </dialog>
   </body>
 </html>
